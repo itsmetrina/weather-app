@@ -1,0 +1,37 @@
+.weather-info-box {
+    margin: 10px;
+    flex: 0 25%;
+    max-width: 25%;
+    background-color: #a474f1;
+    color: #fff;
+    border-radius: 20px;
+    padding: 0 20px;
+}
+
+@media (max-width: 767px) {
+    .weather-info-box {
+        flex: 1 0 0;
+        max-width: 100%;
+    }
+}
+
+@media(min-width: 768px) and (max-width: 1024px) {
+    .weather-info-box {
+        flex: 1 0 0;
+        max-width: 100%;
+    }
+}
+
+.weather-info-box .title {
+    color: #eaeaea;
+}
+
+.weather-info-box .value {
+    font-size: 30px;
+    line-height: 0;
+}
+
+.weather-info-box .value .unit {
+    font-size: 18px;
+    padding-left: 12px;
+}

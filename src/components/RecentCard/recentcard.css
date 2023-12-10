@@ -1,0 +1,45 @@
+.weather-summary {
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+}
+
+.weather-summary .temperature {
+    text-align: center;
+}
+
+.weather-summary .temperature .value {
+    font-size: 55px;
+}
+
+.weather-summary .temperature .unit-format {
+    font-size: 40px;
+    position: relative;
+    top: -6px;
+}
+
+.weather-summary .temperature .weathertext {
+    font-size: 24px;
+    margin-left: -20px;
+    line-height: 0;
+}
+
+.weather-summary .date-info {
+        line-height: 1;
+            margin-top: 3.5rem;
+}
+
+.weather-summary .date-info .date {
+    font-size: 2rem;
+}
+
+.weather-summary .date-info .time,
+.weather-summary .date-info .daystatus {
+    font-size: 1.3rem;
+}
+
+.weather-summary .location-info p {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 10px;
+}

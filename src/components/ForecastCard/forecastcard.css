@@ -1,0 +1,56 @@
+.forecast-card {
+    display: flex;
+    flex-flow: wrap;
+    text-align: center;
+    justify-content: center;
+    margin: 15px;
+    flex: 0 0 23%;
+    max-width: 23%;
+    box-shadow: rgb(130 57 247 / 80%) 0px 2px 5px -1px, rgb(0 0 0 / 0%) 0px 1px 3px -1px;
+    border-radius: 20px;
+    padding: 0 25px;
+}
+
+.forecast-card .date,
+.forecast-card .time {
+    flex: 0 0 100%;
+    max-width: 100%;
+    font-size: 1rem;
+    line-height: 0;
+}
+
+.forecast-card .temperature {
+    flex: 0 0 100%;
+    max-width: 100%;
+    font-size: 2rem;
+    line-height: 0;
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    .forecast-card {
+        flex: 0 0 70%;
+        max-width: 100%;
+        padding-top: 5px;
+    }
+
+    .forecast-card .date,
+    .forecast-card .time {
+        font-size: 1rem;
+        line-height: normal;
+    }
+}
+
+@media(min-width: 768px) and (max-width: 1024px) {
+    .forecast-card {
+        flex: 1 0;
+        max-width: 100%;
+        padding-top: 5px;
+    }
+
+    .forecast-card .date,
+    .forecast-card .time {
+        font-size: 0.8rem !important;
+        line-height: normal !important;
+    }
+}
