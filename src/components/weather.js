@@ -32,12 +32,20 @@ const Weather = () => {
 
     const fetchWeatherWithGeolocation = async () => {
         try {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                const { latitude, longitude } = position.coords;
-                const data = await fetchWeatherDataMerge(latitude, longitude);
-                setWeather(data);
-                setError(null);
-            });
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const data = await fetchWeatherDataMerge(latitude, longitude);
+                    setWeather(data);
+                    setError(null);
+                },
+                async (error) => {
+                    console.error(error);
+                    const data = await fetchWeatherDataMerge(0, 0);
+                    setWeather(data);
+                    setError(null);
+                }
+            );
         } catch (error) {
             console.error(error);
             setError('Error fetching weather data');
