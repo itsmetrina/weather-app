@@ -5,6 +5,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
+import Message from './Message/message';
 import Search from './Search/search';
 import RecentCard from './RecentCard/recentcard';
 import ForecastCard from './ForecastCard/forecastcard';
@@ -79,48 +80,54 @@ const Weather = () => {
     if (list && list.length > 0 && list[0].sys && list[0].sys.pod) {
         document.body.className = list[0].sys.pod;
     }
+    const hasError = error || !weather;
 
     return (
-        <div className="weather">
+        <div className={`weather ${hasError ? 'error-state' : ''}`}>
+            {hasError && <Message message={error || 'Empty response'} />}
 
-            <div className="left-panel">
-                <div className="search-container">
-                    <Search onSearch={handleSearch} />
-                </div>
-                {weather[0] && <RecentCard currentWeather={weather[0]} error={error} />}
-            </div>
+            {!hasError && (
+                <>
+                    <div className="left-panel">
+                        <div className="search-container">
+                            <Search onSearch={handleSearch} />
+                        </div>
+                        {weather[0] && <RecentCard currentWeather={weather[0]} error={error} />}
+                    </div>
 
-            <div className="right-panel">
-                <div className="right-panel-header">
-                    <div className="selection-box">
-                        <div className={`selection-text ${selectedTab === 'In-Depth' ? 'active' : ''}`} onClick={() => setSelectedTab('In-Depth')}>
-                            In-Depth
+                    <div className="right-panel">
+                        <div className="right-panel-header">
+                            <div className="selection-box">
+                                <div className={`selection-text ${selectedTab === 'In-Depth' ? 'active' : ''}`} onClick={() => setSelectedTab('In-Depth')}>
+                                    In-Depth
+                                </div>
+                                <div className={`selection-text ${selectedTab === 'Forecast' ? 'active' : ''}`} onClick={() => setSelectedTab('Forecast')}>
+                                    Forecast
+                                </div>
+                            </div>
+                            <div>
+                                <div className="current-time">{formatDateTime(currentDate)}</div>
+                                <div className="github-icon">
+                                    <a href="https://github.com/itsmetrina/weather-app" target="_blank" rel="noopener noreferrer">
+                                        <FontAwesomeIcon icon={faGithub} />
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div className={`selection-text ${selectedTab === 'Forecast' ? 'active' : ''}`} onClick={() => setSelectedTab('Forecast')}>
-                            Forecast
-                        </div>
+                        {selectedTab === 'In-Depth' ? (
+                            <div className="weatherInfo-container">
+                                {weather[0] && <InDepthDetails currentWeather={weather[0]} error={error} />}
+                            </div>
+                        ) : (
+                            <div className="forecast-container">
+                                {list.slice(1).map((forecast, index) => (
+                                    <ForecastCard key={index} forecast={forecast} error={error} />
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <div>
-                        <div className="current-time">{formatDateTime(currentDate)}</div>
-                        <div className="github-icon">
-                            <a href="https://github.com/itsmetrina/weather-app" target="_blank" rel="noopener noreferrer">
-                                <FontAwesomeIcon icon={faGithub} />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {selectedTab === 'In-Depth' ? (
-                    <div className="weatherInfo-container">
-                        {weather[0] && <InDepthDetails currentWeather={weather[0]} error={error} />}
-                    </div>
-                ) : (
-                    <div className="forecast-container">
-                        {list.slice(1).map((forecast, index) => (
-                            <ForecastCard key={index} forecast={forecast} error={error} />
-                        ))}
-                    </div>
-                )}
-            </div>
+                </>
+            )}
 
         </div>
     );
