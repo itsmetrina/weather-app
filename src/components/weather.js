@@ -39,8 +39,8 @@ const Weather = () => {
                     setWeather(data);
                     setError(null);
                 },
-                async (error) => {
-                    console.error(error);
+                async (warn) => {
+                    console.warn(warn);
                     const data = await fetchWeatherDataMerge(0, 0);
                     setWeather(data);
                     setError(null);
