@@ -4,7 +4,6 @@ import moment from 'moment';
 import "./recentcard.css";
 
 const RecentCard = ({ currentWeather, error }) => {
-    console.log(currentWeather, 'currentWeather')
     const { weather, main, sys, dt, name } = currentWeather;
     const { description, icon } = weather[0];
     const WEATHER_ICON_URL = process.env.REACT_APP_ICON_URL;
