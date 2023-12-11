@@ -33,6 +33,6 @@ export const fetchWeatherDataMerge = async (lat, lon, city) => {
 		return [currentWeatherData, forecastData];
 	} catch (error) {
 		console.error(error);
-		throw new Error('Error fetching weather data with geolocation');
+		throw new Error(error.message);
 	}
 }
