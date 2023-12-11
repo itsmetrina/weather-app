@@ -120,9 +120,13 @@ const Weather = () => {
 
     const hasError = error || !weather;
 
+    const handleBackToInitialState = () => {
+        fetchWeatherWithGeolocation();
+    };
+
     return (
         <div className={`weather ${hasError ? "error-state" : ""}`}>
-            {hasError && <Message message={error || "Empty response"} />}
+            {hasError && <Message message={error || "Empty response"} onBack={handleBackToInitialState} />}
             {!hasError && (
                 <>
                     <div className="left-panel">
