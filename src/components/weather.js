@@ -11,7 +11,7 @@ import RecentCard from './RecentCard/recentcard';
 import ForecastCard from './ForecastCard/forecastcard';
 import InDepthDetails from './InDepthDetails/indepthdetails';
 
-import { fetchWeatherDataMerge, fetchWeatherDataWithGeolocation } from './../services/weatherForecast';
+import { fetchWeatherDataMerge } from './../services/weatherForecast';
 
 const Weather = () => {
     const [weather, setWeather] = useState(null);
@@ -36,20 +36,24 @@ const Weather = () => {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
                     const { latitude, longitude } = position.coords;
-                    const data = await fetchWeatherDataMerge(latitude, longitude);
+                    const data = await fetchWeatherDataMerge(latitude, longitude, null);
                     setWeather(data);
                     setError(null);
                 },
                 async (warn) => {
                     console.warn(warn);
-                    const data = await fetchWeatherDataMerge(0, 0);
-                    setWeather(data);
-                    setError(null);
+                    try {
+                        const data = await fetchWeatherDataMerge(0, 0, null);
+                        setWeather(data);
+                        setError(null);
+                    } catch (error) {
+                        setError(error.message);
+                    }
                 }
             );
         } catch (error) {
             console.error(error);
-            setError('Error fetching weather data');
+            setError(error.message);
         }
     };
 
@@ -59,12 +63,12 @@ const Weather = () => {
 
     const fetchWeather = async (city) => {
         try {
-            const data = await fetchWeatherDataWithGeolocation(city);
+            const data = await fetchWeatherDataMerge(null, null, city);
             setWeather(data);
             setError(null);
         } catch (error) {
             console.error(error);
-            setError('Error fetching weather data');
+            setError(error.message);
         }
     };
 

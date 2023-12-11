@@ -34,16 +34,6 @@ const InDepthDetails = ({ currentWeather, error }) => {
             value: currentWeather.main.humidity
         },
         {
-            name: 'Max Temperarture',
-            unit: '°C',
-            value: currentWeather.main.temp_max
-        },
-        {
-            name: 'Min Temperarture',
-            unit: '°C',
-            value: currentWeather.main.temp_min
-        },
-        {
             name: 'Real Feel',
             unit: '°C',
             value: currentWeather.main.feels_like
@@ -87,13 +77,15 @@ const InDepthDetails = ({ currentWeather, error }) => {
         <>
             {
                 cardDetails.map((card, index) => (
-                    <div key={index} className="weather-info-box">
-                        <p className="title">{card.name}</p>
-                        <p className="value">
-                            <span className={card.name}>{card.value}</span>
-                            <span className="unit">{card.unit}</span>
-                        </p>
-                    </div>
+                    card.value ? (
+                        <div key={index} className="weather-info-box">
+                            <p className="title">{card.name}</p>
+                            <p className="value">
+                                <span className={card.name}>{card.value}</span>
+                                <span className="unit">{card.unit}</span>
+                            </p>
+                        </div>
+                    ) : null
                 ))
             }
         </>
