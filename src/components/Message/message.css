@@ -7,5 +7,12 @@
 }
 
 .msg-text {
+    text-align: center;
     font-size: 5rem;
+}
+
+@media (max-width: 767px) {
+    .msg-text {
+        font-size: 4rem;
+    }
 }
