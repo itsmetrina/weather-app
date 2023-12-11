@@ -4,12 +4,8 @@ import './indepthdetails.css';
 import moment from 'moment';
 
 const InDepthDetails = ({ currentWeather, error }) => {
-    const formatTime = (date) => {
-        return date.format("h:mm:ss");
-    };
-
-    const formatAMPM = (date) => {
-        return date.format("a");
+    const formatTime = (date, timezone) => {
+        return moment.unix(date).add(timezone, 'seconds').format('H:mm:ss');
     };
 
     const cardDetails = [
@@ -55,13 +51,13 @@ const InDepthDetails = ({ currentWeather, error }) => {
         },
         {
             name: 'Sunrise',
-            unit: formatAMPM(moment.unix(currentWeather.sys.sunrise)),
-            value: formatTime(moment.unix(currentWeather.sys.sunrise))
+            unit: null,
+            value: formatTime(currentWeather.sys.sunrise, currentWeather.timezone)
         },
         {
             name: 'Sunset',
-            unit: formatAMPM(moment.unix(currentWeather.sys.sunset)),
-            value: formatTime(moment.unix(currentWeather.sys.sunset))
+            unit: null,
+            value: formatTime(currentWeather.sys.sunset, currentWeather.timezone)
         }
     ];
 

@@ -4,20 +4,18 @@
 :root {
 	--black: #212529;
 	--white: #fff;
-	--blue: #007bff;
-	--blue-dark: #056ad5;
+	--lavender: #a474f1;
+	--light-lavender: #a474f14f;
 }
 
 * {
 	font-family: 'Quicksand', sans-serif;
 }
 
-::-webkit-scrollbar {
-	width: 0.5em;
-	background-color: transparent;
-}
-
+::-webkit-scrollbar,
 ::-webkit-scrollbar-thumb {
+	width: 0;
+	height: 0;
 	background-color: transparent;
 }
 
@@ -30,17 +28,30 @@ body {
 	height: 100%;
 }
 
-.d {
+.d,
+.d button,
+.d button:not(.n) {
 	color: var(--black);
 	background-color: var(--white);
 }
 
-.n {
+.d button:not(.disabled):hover {
+	color: var(--white);
+	background-color: var(--lavender);
+}
+
+.n,
+.n button,
+.n button:not(.d) {
 	color: var(--white);
 	background-color: var(--black);
 }
 
+.n button:not(.disabled):hover {
+	color: var(--white);
+	background-color: var(--lavender);
+}
+
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

@@ -11,7 +11,7 @@
     padding: 0 25px;
 }
 
-.forecast-card .date,
+.forecast-card .description,
 .forecast-card .time {
     flex: 0 0 100%;
     max-width: 100%;
@@ -34,7 +34,7 @@
         padding-top: 5px;
     }
 
-    .forecast-card .date,
+    .forecast-card .description,
     .forecast-card .time {
         font-size: 1rem;
         line-height: normal;
@@ -48,7 +48,7 @@
         padding-top: 5px;
     }
 
-    .forecast-card .date,
+    .forecast-card .description,
     .forecast-card .time {
         font-size: 0.8rem !important;
         line-height: normal !important;

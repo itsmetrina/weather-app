@@ -4,17 +4,17 @@ import moment from 'moment';
 import "./recentcard.css";
 
 const RecentCard = ({ currentWeather, error }) => {
-    const { weather, main, sys, dt, name } = currentWeather;
+    const { weather, main, sys, dt, name, timezone } = currentWeather;
     const { description, icon } = weather[0];
     const WEATHER_ICON_URL = process.env.REACT_APP_ICON_URL;
 
-    const formatDate = (date) => {
-        return date.format("MMMM Do YYYY");
-    };
+    const convertUTCtoLocalDate = (dt, timezone) => {
+        return moment.unix(dt).add(timezone, 'seconds').format('MMMM Do YYYY');
+    }
 
-    const formatTime = (date) => {
-        return date.format("dddd, h:mm:ss a");
-    };
+    const convertUTCtoLocalTime = (dt, timezone) => {
+        return moment.unix(dt).add(timezone, 'seconds').format('dddd, H:mm:ss');
+    }
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -37,8 +37,8 @@ const RecentCard = ({ currentWeather, error }) => {
                 <p className="weathertext">{description}</p>
             </div>
             <div className="date-info">
-                <p className="date">{formatDate(moment.unix(dt))}</p>
-                <p className="time">{formatTime(moment.unix(dt))}</p>
+                <p className="date">{convertUTCtoLocalDate(dt, timezone)}</p>
+                <p className="time">{convertUTCtoLocalTime(dt, timezone)}</p>
                 <p className="daystatus">{sys.pod === 'n' ? 'Night' : 'Day'}</p>
             </div>
             <div className="location-info">
