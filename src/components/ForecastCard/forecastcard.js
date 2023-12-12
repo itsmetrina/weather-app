@@ -1,17 +1,12 @@
 import React from 'react';
-import moment from 'moment';
-
 import './forecastcard.css';
 
-const ForecastCard = ({ forecast, error }) => {
-    console.log(forecast,'forecast')
-    const { dt, main, weather } = forecast;
+import { displayLocalTime } from './../../shared/date';
+
+const ForecastCard = ({ forecast, timeFormat, error }) => {
+    const { dt, main, weather, timezone } = forecast;
     const { icon, description } = weather[0];
     const WEATHER_ICON_URL = process.env.REACT_APP_ICON_URL;
-
-    const formatTime = (date, timezone) => {
-        return moment.unix(date).add(timezone, 'seconds').format('H:mm');
-    };
 
     const toTitleCase = (str) => {
         return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
@@ -27,7 +22,7 @@ const ForecastCard = ({ forecast, error }) => {
 
     return (
         <div className="forecast-card">
-            <p className="time">{formatTime(dt)}</p>
+            <p className="time">{displayLocalTime(dt, timezone, timeFormat)}</p>
             <p className="description">{toTitleCase(description)}</p>
             <img src={`${WEATHER_ICON_URL}/${icon}@2x.png`} alt="Weather Icon" />
             <p className="temperature">{main.temp}°C</p>

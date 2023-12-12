@@ -1,12 +1,11 @@
 import React from 'react';
 import './indepthdetails.css';
 
-import moment from 'moment';
+import {
+    displayLocalTime
+} from './../../shared/date';
 
-const InDepthDetails = ({ currentWeather, error }) => {
-    const formatTime = (date, timezone) => {
-        return moment.unix(date).add(timezone, 'seconds').format('H:mm:ss');
-    };
+const InDepthDetails = ({ currentWeather, timeFormat, error }) => {
 
     const cardDetails = [
         {
@@ -51,13 +50,13 @@ const InDepthDetails = ({ currentWeather, error }) => {
         },
         {
             name: 'Sunrise',
-            unit: null,
-            value: formatTime(currentWeather.sys.sunrise, currentWeather.timezone)
+            unit: displayLocalTime(currentWeather.sys.sunrise, currentWeather.timezone, timeFormat, 's').period,
+            value: displayLocalTime(currentWeather.sys.sunrise, currentWeather.timezone, timeFormat, 's').time
         },
         {
             name: 'Sunset',
-            unit: null,
-            value: formatTime(currentWeather.sys.sunset, currentWeather.timezone)
+            unit: displayLocalTime(currentWeather.sys.sunset, currentWeather.timezone, timeFormat, 's').period,
+            value: displayLocalTime(currentWeather.sys.sunset, currentWeather.timezone, timeFormat, 's').time
         }
     ];
 
@@ -70,7 +69,7 @@ const InDepthDetails = ({ currentWeather, error }) => {
     }
 
     return (
-        <>
+        <div className="weather-info-container">
             {
                 cardDetails.map((card, index) => (
                     card.value ? (
@@ -84,7 +83,7 @@ const InDepthDetails = ({ currentWeather, error }) => {
                     ) : null
                 ))
             }
-        </>
+        </div>
     );
 };
 

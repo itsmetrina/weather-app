@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import './forecastdateselection.css';
 
-import moment from 'moment';
-
 import ForecastCard from './../ForecastCard/forecastcard';
 
-const ForecastDateSelection = ({ forecast, dates, error }) => {
-    const [selectedDate, setSelectedDate] = useState(dates[0]);
+import { customDateFormat } from './../../shared/date';
+
+const ForecastDateSelection = ({ forecast, timeFormat, error }) => {
+    var date_arr = [];
+    for (let i = 0; i < forecast.length; i++) {
+        date_arr.push(forecast[i].date);
+    }
+
+    const [selectedDate, setSelectedDate] = useState(date_arr[0]);
 
     const handleDateChange = (newDate) => {
         setSelectedDate(newDate);
-    };
-
-    const formatDate = (date) => {
-        return moment(date).format('DD MMMM YYYY');
     };
 
     const selectedForecast = forecast.find((item) => item.date === selectedDate);
@@ -22,27 +23,32 @@ const ForecastDateSelection = ({ forecast, dates, error }) => {
         return <div>Error: {error}</div>;
     }
 
-    if (!forecast && !dates) {
+    if (!forecast && !date_arr) {
         return <div>Loading...</div>;
     }
 
     return (
         <>
-            <div className="dateSlectionBox">
-                {dates.map((date, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleDateChange(date)}
-                        disabled={date === selectedDate}
-                    >
-                        {formatDate(date)}
-                    </button>
-                ))}
+            <div className="date-slection-box">
+                <div className="weekday">
+                    {new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' })}
+                </div>
+                <div className="dates">
+                    {date_arr.map((date, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleDateChange(date)}
+                            disabled={date === selectedDate}
+                        >
+                            {customDateFormat(date)}
+                        </button>
+                    ))}
+                </div>
             </div>
             <div className="forecast-container">
                 {selectedForecast ? (
-                    selectedForecast.forecastData.map((data, index) => (
-                        <ForecastCard key={index} forecast={data} error={error} />
+                    selectedForecast.forecasted_list.map((data, index) => (
+                        <ForecastCard key={index} forecast={data} timeFormat={timeFormat} error={error} />
                     ))
                 ) : (
                     <p>No forecast data available for the selected date.</p>

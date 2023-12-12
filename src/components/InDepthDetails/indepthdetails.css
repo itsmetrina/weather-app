@@ -1,4 +1,9 @@
-.weather-info-box {
+.weather-info-container {
+    display: flex;
+    flex-flow: wrap;
+}
+
+.weather-info-container .weather-info-box {
     margin: 10px;
     flex: 0 25%;
     max-width: 25%;
@@ -9,29 +14,29 @@
 }
 
 @media (max-width: 767px) {
-    .weather-info-box {
+    .weather-info-container .weather-info-box {
         flex: 1 0 0;
         max-width: 100%;
     }
 }
 
 @media(min-width: 768px) and (max-width: 1024px) {
-    .weather-info-box {
+    .weather-info-container .weather-info-box {
         flex: 1 0 0;
         max-width: 100%;
     }
 }
 
-.weather-info-box .title {
+.weather-info-container .weather-info-box .title {
     color: #eaeaea;
 }
 
-.weather-info-box .value {
+.weather-info-container .weather-info-box .value {
     font-size: 30px;
     line-height: 0;
 }
 
-.weather-info-box .value .unit {
+.weather-info-container .weather-info-box .value .unit {
     font-size: 18px;
     padding-left: 12px;
 }

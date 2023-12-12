@@ -23,6 +23,7 @@ https://itsmetrina.github.io/weather-app/
 - Error Handling: Display informative messages if there are API errors or empty responses.
 - Day/Night Mode: Automatically switch between light and dark modes based on the time of day.
 - Responsive Design: Enjoy a seamless experience across various devices.
+- Toggle between 12hr and 24hr format.
 - Live previews
 
 ## API Reference

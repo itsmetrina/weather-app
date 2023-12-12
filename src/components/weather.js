@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./weather.css";
 
-import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
@@ -11,24 +10,23 @@ import RecentCard from "./RecentCard/recentcard";
 import ForecastDateSelection from "./ForecastDateSelection/forecastdateselection";
 import InDepthDetails from "./InDepthDetails/indepthdetails";
 
-import { fetchWeatherDataMerge } from "./../services/weatherForecast";
+import { displayCurrentDateTime, isDay, unixTimezoneFormatter } from "../shared/date";
+import { fetchWeatherDataMerge } from "../shared/openweatherData";
 
 const Weather = () => {
     const [weather, setWeather] = useState(null);
     const [error, setError] = useState(null);
     const [selectedTab, setSelectedTab] = useState("In-Depth");
-    const [currentDate, setCurrentDate] = useState(moment());
+    const [timeFormat, setTimeFormat] = useState('12');
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentDate(moment());
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
         }, 1000);
-        return () => clearInterval(interval);
-    }, []);
 
-    const formatDateTime = (date) => {
-        return date.format("dddd, MMMM Do YYYY, H:mm:ss");
-    };
+        return () => clearInterval(intervalId);
+    }, []);
 
     const fetchWeatherWithGeolocation = async () => {
         try {
@@ -71,52 +69,41 @@ const Weather = () => {
         }
     };
 
-    const filterForecastRecords = (list) => {
-        const currentDate = moment().format("YYYY-MM-DD");
-        return list.filter(
-            (item) => moment(item.dt_txt).format("YYYY-MM-DD") !== currentDate
-        );
-    };
-
     const handleSearch = (city) => {
         fetchWeather(city);
     };
 
-    if (!weather) {
-        return <div>Loading...</div>;
-    };
+    const transformedArray = weather && weather[1] ? weather[1].list.reduce((acc, forecast) => {
+        const date = forecast.dt_txt.split(' ')[0];
+        const weekday = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
+        const existingDateEntry = acc.find(entry => entry.date === date);
+        if (existingDateEntry) {
+            existingDateEntry.forecasted_list.push({
+                ...forecast,
+                timezone: weather[1].city.timezone
+            });
+        } else {
+            acc.push({
+                date,
+                weekday: weekday,
+                forecasted_list: [{
+                    ...forecast,
+                    timezone: weather[1].city.timezone
+                }],
+            });
+        }
+        return acc;
+    }, []) : [];
 
-    const { list } = weather[1];
+    const filteredData = weather && weather[0] && weather[1] ? transformedArray.filter(item => {
+        const itemDate = new Date(item.date);
+        const weatherDate = new Date(unixTimezoneFormatter(weather[0].dt, weather[0].timezone));
+        return itemDate > weatherDate;
+    }) : [];
 
-    const filteredForecastList = filterForecastRecords(list).reduce(
-        (acc, forecast) => {
-            const date = moment(forecast.dt_txt).format("YYYY-MM-DD");
-            const existingEntry = acc.find((entry) => entry.date === date);
-            if (existingEntry) {
-                existingEntry.forecastData.push(forecast);
-            } else {
-                acc.push({
-                    date,
-                    forecastData: [forecast],
-                });
-            }
-            return acc;
-        },
-        []
-    );
-
-    const formattedDateArray = filteredForecastList.map((item) => item.date);
-
-    const isDay = (dt, sunrise, sunset, timezone) => {
-        const localDt = moment.unix(dt).add(timezone, 'seconds');
-        const localSunrise = moment.unix(sunrise).add(timezone, 'seconds');
-        const localSunset = moment.unix(sunset).add(timezone, 'seconds');
-        return (localDt >= localSunrise && localDt <= localSunset) ? 'd' : 'n';
-    }
-
-    if (weather[0]) {
+    if (weather && weather[0]) {
         document.body.className = isDay(weather[0].dt, weather[0].sys.sunrise, weather[0].sys.sunset, weather[0].timezone);
-    };
+    }
 
     const hasError = error || !weather;
 
@@ -124,70 +111,72 @@ const Weather = () => {
         fetchWeatherWithGeolocation();
     };
 
+    if (!(weather && weather.length > 0)) {
+        return <div>Loading...</div>;
+    };
+
     return (
-        <div className={`weather ${hasError ? "error-state" : ""}`}>
+        <div className={`weather-container ${hasError ? "error-state" : ""}`}>
             {hasError && <Message message={error || "Empty response"} onBack={handleBackToInitialState} />}
-            {!hasError && (
-                <>
-                    <div className="left-panel">
-                        <div className="search-container">
-                            <Search onSearch={handleSearch} />
-                        </div>
-                        {weather[0] && (
-                            <RecentCard currentWeather={weather[0]} error={error} />
-                        )}
+            {!hasError && (<>
+                <div className="weather-items">
+                    <Search onSearch={handleSearch} />
+                </div>
+                <div className="weather-items selection-container">
+                    <div className={`selection-text ${selectedTab === "In-Depth" ? "active" : ""}`}
+                        onClick={() => setSelectedTab("In-Depth")}>
+                        In-Depth
                     </div>
-                    <div className="right-panel">
-                        <div className="right-panel-header">
-                            <div className="selection-box">
-                                <div
-                                    className={`selection-text ${selectedTab === "In-Depth" ? "active" : ""
-                                        }`}
-                                    onClick={() => setSelectedTab("In-Depth")}
-                                >
-                                    In-Depth
-                                </div>
-                                <div
-                                    className={`selection-text ${selectedTab === "Weekly Forecast" ? "active" : ""
-                                        }`}
-                                    onClick={() => setSelectedTab("Weekly Forecast")}
-                                >
-                                    Weekly Forecast
-                                </div>
-                            </div>
-                            <div>
-                                <div className="current-time">
-                                    {formatDateTime(currentDate)}
-                                </div>
-                                <div className="github-icon">
-                                    <a
-                                        href="https://github.com/itsmetrina/weather-app"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <FontAwesomeIcon icon={faGithub} />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        {selectedTab === "In-Depth" ? (
-                            <div className="weatherInfo-container">
-                                {weather[0] && (
-                                    <InDepthDetails currentWeather={weather[0]} error={error} />
-                                )}
-                            </div>
-                        ) : (
-                            <>
-                                <ForecastDateSelection
-                                    forecast={filteredForecastList}
-                                    dates={formattedDateArray}
-                                    error={error}
-                                />
-                            </>
-                        )}
+                    <div className={`selection-text ${selectedTab === "Weekly Forecast" ? "active" : ""}`}
+                        onClick={() => setSelectedTab("Weekly Forecast")}>
+                        Weekly Forecast
                     </div>
-                </>
-            )}
+                </div>
+                <div className="weather-items info">
+                    <div className="current-time">
+                        {displayCurrentDateTime(currentDateTime, timeFormat)}
+                    </div>
+                    <div className="time-format">
+                        <select value={timeFormat} onChange={(e) => setTimeFormat(e.target.value)}>
+                            <option value="24">24hr</option>
+                            <option value="12">12hr</option>
+                        </select>
+                    </div>
+                    <div className="github-icon">
+                        <a
+                            href="https://github.com/itsmetrina/weather-app"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <FontAwesomeIcon icon={faGithub} />
+                        </a>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                <div className="weather-items">
+                    {weather[0] && (
+                        <RecentCard currentWeather={weather[0]} timeFormat={timeFormat} error={error} />
+                    )}
+                </div>
+                <div className="weather-items">
+                    {selectedTab === "In-Depth" ? (
+                        <>
+                            {weather[0] && (
+                                <InDepthDetails currentWeather={weather[0]} timeFormat={timeFormat} error={error} />
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <ForecastDateSelection
+                                forecast={filteredData}
+                                timeFormat={timeFormat}
+                                error={error}
+                            />
+                        </>
+                    )}
+                </div>
+            </>)}
         </div>
     );
 }

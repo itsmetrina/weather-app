@@ -1,8 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap');
 
+/* {
+	--dark-russian-violet: #10002B;
+	--light-russian-violet: #240046;
+	--persian-indigo: #3C096C;
+	--tekhelet: #5A189A;
+	--french-violet: #7B2CBF;
+	--amethyst: #9D4EDD;
+	--heliotrope: #C77DFF;
+	--mauve: #E0AAFF;
+} */
+
 :root {
-	--black: #212529;
+	--black: #222831;
 	--white: #fff;
 	--lavender: #a474f1;
 	--light-lavender: #a474f14f;
@@ -30,7 +41,9 @@ body {
 
 .d,
 .d button,
-.d button:not(.n) {
+.d button:not(.n),
+.d select,
+.d select:not(.n) {
 	color: var(--black);
 	background-color: var(--white);
 }
@@ -42,7 +55,9 @@ body {
 
 .n,
 .n button,
-.n button:not(.d) {
+.n button:not(.d),
+.n select,
+.n select:not(.d) {
 	color: var(--white);
 	background-color: var(--black);
 }
@@ -54,4 +69,9 @@ body {
 
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+button,
+select {
+	border: none;
 }
