@@ -1,17 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap');
 
-/* {
-	--dark-russian-violet: #10002B;
-	--light-russian-violet: #240046;
-	--persian-indigo: #3C096C;
-	--tekhelet: #5A189A;
-	--french-violet: #7B2CBF;
-	--amethyst: #9D4EDD;
-	--heliotrope: #C77DFF;
-	--mauve: #E0AAFF;
-} */
-
 :root {
 	--black: #222831;
 	--white: #fff;

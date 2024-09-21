@@ -12,14 +12,6 @@ const RecentCard = ({ currentWeather, timeFormat, error }) => {
     const { description, icon } = weather[0];
     const WEATHER_ICON_URL = process.env.REACT_APP_ICON_URL;
 
-    // const convertUTCtoLocalDate = (dt, timezone) => {
-    //     return moment.unix(dt).add(timezone, 'seconds').format('MMMM Do YYYY');
-    // }
-
-    // const convertUTCtoLocalTime = (dt, timezone) => {
-    //     return moment.unix(dt).add(timezone, 'seconds').format('dddd, H:mm:ss');
-    // }
-
     if (error) {
         return <div>Error: {error}</div>;
     }
